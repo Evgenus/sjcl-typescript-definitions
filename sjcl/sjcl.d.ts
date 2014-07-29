@@ -10,6 +10,7 @@
     export var misc: SjclMisc;
     export var random: SjclRandom;
     export var prng: SjclRandomStatic;
+    export var keyexchange: SjclKeyExchange;
 
     // ________________________________________________________________________
 
@@ -443,6 +444,23 @@
 
     interface SjclRandomStatic {
         new (defaultParanoia: number): SjclRandom;
+    }
+
+    // ________________________________________________________________________
+
+    interface SjclKeyExchange {
+        srp: SecureRemotePassword;
+    }
+
+    interface SjclSRPGroup {
+        N: BigNumber;
+        g: BigNumber;
+    }
+
+    interface SecureRemotePassword {
+        makeVerifier(username: string, password: string, salt: BitArray, group: SjclSRPGroup): BitArray;
+        makeX(username: string, password: string, salt: BitArray): BitArray;
+        knownGroup(i: string): SjclSRPGroup;
     }
 
     // ________________________________________________________________________
