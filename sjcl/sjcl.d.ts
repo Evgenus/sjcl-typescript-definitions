@@ -302,6 +302,129 @@
 
     // ________________________________________________________________________
 
+    interface SjclEllipticCurveCryptography {
+        point: SjclEllipticalPointStatic;
+        pointJac: SjclPointJacobianStatic;
+        curve: SjclEllipticalCurveStatic;
+        curves: {
+            c192: SjclEllipticalCurve;
+            c224: SjclEllipticalCurve;
+            c256: SjclEllipticalCurve;
+            c384: SjclEllipticalCurve;
+            k192: SjclEllipticalCurve;
+            k224: SjclEllipticalCurve;
+            k256: SjclEllipticalCurve;
+        };
+        basicKey: SjclECCBasic;
+        elGamal: SjclElGamal;
+        ecdsa: SjclEcdsa;
+    }
+
+    interface SjclEllipticalPoint {
+        toJac(): SjclPointJacobian;
+        mult(k: BigNumber): SjclEllipticalPoint;
+        mult2(k: BigNumber, k2: BigNumber, affine2: SjclEllipticalPoint): SjclEllipticalPoint;
+        multiples(): Array<SjclEllipticalPoint>;
+        isValid(): boolean;
+        toBits(): BitArray;
+    }
+
+    interface SjclEllipticalPointStatic {
+        new (curve: SjclEllipticalCurve, x?: BigNumber, y?: BigNumber): SjclEllipticalPoint;
+    }
+
+    interface SjclPointJacobian {
+        add(T: SjclEllipticalPoint): SjclPointJacobian;
+        doubl(): SjclPointJacobian;
+        toAffine(): SjclEllipticalPoint;
+        mult(k: BigNumber, affine: SjclEllipticalPoint): SjclPointJacobian;
+        mult2(k1: BigNumber, affine: SjclEllipticalPoint, k2: BigNumber, affine2: SjclEllipticalPoint): SjclPointJacobian;
+        isValid(): boolean;
+    }
+
+    interface SjclPointJacobianStatic {
+        new (curve: SjclEllipticalCurve, x?: BigNumber, y?: BigNumber, z?: BigNumber):SjclPointJacobian;
+    }
+
+    interface SjclEllipticalCurve {
+        fromBits(bits: BitArray): SjclEllipticalPoint;
+    }
+
+    interface SjclEllipticalCurveStatic {
+        new (Field: BigNumber, r: BigNumber, a: BigNumber, b: BigNumber, x: BigNumber, y: BigNumber): SjclEllipticalCurve;
+    }
+
+    interface SjclKeyPair<P extends SjclECCPublicKey, S extends SjclECCSecretKey> {
+        pub: P;
+        sec: S;
+    }
+
+    interface SjclKeysGenerator<P extends SjclECCPublicKey, S extends SjclECCSecretKey> {
+        (curve: SjclEllipticalCurve, paranoia: number, sec: BigNumber): SjclKeyPair<P, S>;
+    }
+
+    interface SjclECCPublicKeyData {
+        x: BitArray;
+        y: BitArray;
+    }
+
+    class SjclECCPublicKey {
+        get(): SjclECCPublicKeyData;
+    }
+
+    class SjclECCSecretKey {
+        get(): BitArray;
+    }
+
+    interface SjclECCPublicKeyFactory<T extends SjclECCPublicKey> {
+        new (curve: SjclEllipticalCurve, point: SjclEllipticalPoint): T;
+        new (curve: SjclEllipticalCurve, point: BitArray): T;
+    }
+
+    interface SjclECCSecretKeyFactory<T extends SjclECCSecretKey> {
+        new (curve: SjclEllipticalCurve, exponent: BigNumber): T;
+    }
+
+    interface SjclECCBasic {
+        publicKey: SjclECCPublicKeyFactory<SjclECCPublicKey>;
+        secretKey: SjclECCSecretKeyFactory<SjclECCSecretKey>;
+        generateKeys(cn: string): SjclKeysGenerator<SjclECCPublicKey, SjclECCSecretKey>;
+    }
+
+    class SjclElGamalPublicKey extends SjclECCPublicKey {
+        kem(paranoia: number): {
+            key: BitArray;
+            tag: BitArray;
+        };
+    }
+
+    class SjclElGamalSecretKey extends SjclECCSecretKey {
+        unkem(tag: BitArray): BitArray;
+        dh(pk: SjclECCPublicKey): BitArray;
+    }
+
+    interface SjclElGamal {
+        publicKey: SjclECCPublicKeyFactory<SjclElGamalPublicKey>;
+        secretKey: SjclECCSecretKeyFactory<SjclElGamalSecretKey>;
+        generateKeys: SjclKeysGenerator<SjclElGamalPublicKey, SjclElGamalSecretKey>;
+    }
+
+    class SjclEcdsaPublicKey extends SjclECCPublicKey {
+        verify(hash: BitArray, rs: BitArray, fakeLegacyVersion: boolean): boolean;
+    }
+
+    class SjclEcdsaSecretKey extends SjclECCSecretKey {
+        sign(hash: BitArray, paranoia: number, fakeLegacyVersion: boolean, fixedKForTesting?: BigNumber): BitArray;
+    }
+
+    interface SjclEcdsa {
+        publicKey: SjclECCPublicKeyFactory<SjclEcdsaPublicKey>;
+        secretKey: SjclECCSecretKeyFactory<SjclEcdsaSecretKey>;
+        generateKeys: SjclKeysGenerator<SjclEcdsaPublicKey, SjclEcdsaSecretKey>;
+    }
+
+    // ________________________________________________________________________
+
     module TypeHelpers {
         interface One<T> {
             (value: T): BigNumber;
