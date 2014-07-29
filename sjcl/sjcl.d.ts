@@ -4,6 +4,7 @@
     export var bitArray: BitArrayStatic;
     export var codec: SjclCodecs;
     export var hash: SjclHashes;
+    export var exception: SjclExceptions;
 
     // ________________________________________________________________________
 
@@ -178,6 +179,17 @@
     }
 
     // ________________________________________________________________________
+
+    interface SjclExceptions {
+        corrupt: SjclExceptionFactory;
+        invalid: SjclExceptionFactory;
+        bug: SjclExceptionFactory;
+        notReady: SjclExceptionFactory;
+    }
+
+    interface SjclExceptionFactory {
+        new (message: string): Error;
+    }
 
     module TypeHelpers {
         interface One<T> {
