@@ -1,23 +1,11 @@
 ﻿declare module sjcl {
 
-    module TypeHelpers {
-        interface One<T> {
-            (value: T): BigNumber;
-        }
+    export var bn: BigNumberStatic;
+    export var bitArray: BitArrayStatic;
+    export var codec: SjclCodecs;
+    export var hash: SjclHashes;
 
-        interface Binary extends One<number>, One<string>, One<BigNumber> {
-        }
-
-        interface Two<T1, T2> {
-            (x: T1, N: T2): BigNumber;
-        }
-
-        interface Bind1<T> extends Two<number, T>, Two<string, T>, Two<BigNumber, T> {
-        }
-
-        interface Trinary extends Bind1<number>, Bind1<string>, Bind1<BigNumber> {
-        }
-    }
+    // ________________________________________________________________________
 
     interface BigNumber {
         radix: number;
@@ -26,7 +14,7 @@
         copy(): BigNumber;
 
         /// Initializes this with it, either as a bn, a number, or a hex string.
-        initWith: TypeHelpers.Binary;
+        initWith: TypeHelpers.BigNumberBinaryOperator;
 
         /// Returns true if "this" and "that" are equal.  Calls fullReduce().
         /// Equality test is in constant time.
@@ -45,7 +33,7 @@
         toString(): string;
 
         /// this += that.  Does not normalize.
-        addM: TypeHelpers.Binary;
+        addM: TypeHelpers.BigNumberBinaryOperator;
 
         /// this *= 2.  Requires normalized; ends up normalized.
         doubleM(): BigNumber;
@@ -54,21 +42,21 @@
         halveM(): BigNumber;
 
         /// this -= that.  Does not normalize.
-        subM: TypeHelpers.Binary;
+        subM: TypeHelpers.BigNumberBinaryOperator;
 
-        mod: TypeHelpers.Binary;
+        mod: TypeHelpers.BigNumberBinaryOperator;
 
         /// return inverse mod prime p.  p must be odd. Binary extended Euclidean algorithm mod p.
-        inverseMod: TypeHelpers.Binary;
+        inverseMod: TypeHelpers.BigNumberBinaryOperator;
 
         /// this + that.  Does not normalize.
-        add: TypeHelpers.Binary;
+        add: TypeHelpers.BigNumberBinaryOperator;
 
         /// this - that.  Does not normalize.
-        sub: TypeHelpers.Binary;
+        sub: TypeHelpers.BigNumberBinaryOperator;
 
         /// this * that.  Normalizes and reduces.
-        mul: TypeHelpers.Binary;
+        mul: TypeHelpers.BigNumberBinaryOperator;
 
         /// this ^ 2.  Normalizes and reduces.
         square(): BigNumber;
@@ -79,10 +67,10 @@
         power(a: number[]): BigNumber;
 
         /// this * that mod N
-        mulmod: TypeHelpers.Trinary;
+        mulmod: TypeHelpers.BigNumberTrinaryOperator;
 
         /// this ^ x mod N
-        powermod: TypeHelpers.Trinary;
+        powermod: TypeHelpers.BigNumberTrinaryOperator;
 
         trim(): BigNumber;
 
@@ -115,6 +103,8 @@
         random: TypeHelpers.Bind1<number>;
         //pseudoMersennePrime
     }
+
+    // ________________________________________________________________________
 
     interface BitArray extends Array<number> {
     }
@@ -151,20 +141,60 @@
         _xor4(x: number[], y: number[]): number[];
     }
 
-    interface ISjclCodec<T> {
+    // ________________________________________________________________________
+
+    interface SjclCodec<T> {
         fromBits(bits: BitArray): T;
         toBits(value: T): BitArray;
     }
 
     interface SjclCodecs {
-        utf8String: ISjclCodec<string>;
-        hex: ISjclCodec<string>;
-        bytes: ISjclCodec<number[]>;
-        base64: ISjclCodec<string>;
-        base64url: ISjclCodec<string>;
+        utf8String: SjclCodec<string>;
+        hex: SjclCodec<string>;
+        bytes: SjclCodec<number[]>;
+        base64: SjclCodec<string>;
+        base64url: SjclCodec<string>;
     }
 
-    export var bn: BigNumberStatic;
-    export var bitArray: BitArrayStatic;
-    export var codec: SjclCodecs;
+    // ________________________________________________________________________
+
+    interface SjclHash {
+        reset(): SjclHash;
+        update(data: string): SjclHash;
+        update(data: BitArray): SjclHash;
+        finalize(): BitArray;
+    }
+
+    interface SjclHashStatic {
+        new (hash?: SjclHash): SjclHash;
+        hash(data: string): BitArray;
+        hash(data: BitArray): BitArray;
+    }
+
+    interface SjclHashes {
+        sha1: SjclHashStatic;
+        sha256: SjclHashStatic;
+        sha512: SjclHashStatic;
+    }
+
+    // ________________________________________________________________________
+
+    module TypeHelpers {
+        interface One<T> {
+            (value: T): BigNumber;
+        }
+
+        interface BigNumberBinaryOperator extends One<number>, One<string>, One<BigNumber> {
+        }
+
+        interface Two<T1, T2> {
+            (x: T1, N: T2): BigNumber;
+        }
+
+        interface Bind1<T> extends Two<number, T>, Two<string, T>, Two<BigNumber, T> {
+        }
+
+        interface BigNumberTrinaryOperator extends Bind1<number>, Bind1<string>, Bind1<BigNumber> {
+        }
+    }
 }
