@@ -7,6 +7,7 @@
     export var exception: SjclExceptions;
     export var cipher: SjclCiphers;
     export var mode: SjclModes;
+    export var misc: SjclMisc;
 
     // ________________________________________________________________________
 
@@ -237,6 +238,39 @@
         encrypt(prp: any, plaintext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
         decrypt(prp: any, ciphertext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
     } 
+
+    // ________________________________________________________________________
+
+
+    interface SjclMisc {
+        pbkdf2(password: string, salt: string, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
+        pbkdf2(password: BitArray, salt: string, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
+        pbkdf2(password: BitArray, salt: BitArray, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
+        pbkdf2(password: string, salt: BitArray, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
+        hmac: SjclHmacStatic;
+    }
+
+    interface SjclPseudorandomFunctionFamily {
+        encrypt(data: string): BitArray;
+        encrypt(data: BitArray): BitArray;
+    }
+
+    interface SjclHmac extends SjclPseudorandomFunctionFamily {
+        mac(data: string): BitArray;
+        mac(data: BitArray): BitArray;
+        reset(): void;
+        update(data: string): void;
+        update(data: BitArray): void;
+        digest(): BitArray;
+    }
+
+    interface SjclPseudorandomFunctionFamilyStatic {
+        new (key: BitArray): SjclPseudorandomFunctionFamily;
+    }
+
+    interface SjclHmacStatic extends SjclPseudorandomFunctionFamilyStatic {
+        new (key: BitArray, Hash?: SjclHashStatic): SjclHmac;
+    }
 
     // ________________________________________________________________________
 
