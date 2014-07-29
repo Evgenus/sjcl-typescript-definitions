@@ -6,6 +6,7 @@
     export var hash: SjclHashes;
     export var exception: SjclExceptions;
     export var cipher: SjclCiphers;
+    export var mode: SjclModes;
 
     // ________________________________________________________________________
 
@@ -206,6 +207,38 @@
     interface SjclCipherStatic {
         new (key: number[]): SjclCipher;
     }
+
+    // ________________________________________________________________________
+
+    interface SjclModes {
+        gcm: SjclGCMMode;
+        ccm: SjclCCMMode;
+        ocb2: SjclOCB2Mode;
+        cbc: SjclCBCMode;
+    }
+
+    interface SjclGCMMode {
+        encrypt(prp: any, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+        decrypt(prp: any, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+    } 
+
+    interface SjclCCMMode {
+        encrypt(prp: any, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+        decrypt(prp: any, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+    } 
+
+    interface SjclOCB2Mode {
+        encrypt(prp: any, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number, premac?: boolean): BitArray;
+        decrypt(prp: any, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number, premac?: boolean): BitArray;
+        pmac(prp: SjclCipher, adata: BitArray): number[];
+    } 
+
+    interface SjclCBCMode {
+        encrypt(prp: any, plaintext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
+        decrypt(prp: any, ciphertext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
+    } 
+
+    // ________________________________________________________________________
 
     module TypeHelpers {
         interface One<T> {
