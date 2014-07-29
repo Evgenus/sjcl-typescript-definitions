@@ -8,6 +8,8 @@
     export var cipher: SjclCiphers;
     export var mode: SjclModes;
     export var misc: SjclMisc;
+    export var random: SjclRandom;
+    export var prng: SjclRandomStatic;
 
     // ________________________________________________________________________
 
@@ -421,6 +423,26 @@
         publicKey: SjclECCPublicKeyFactory<SjclEcdsaPublicKey>;
         secretKey: SjclECCSecretKeyFactory<SjclEcdsaSecretKey>;
         generateKeys: SjclKeysGenerator<SjclEcdsaPublicKey, SjclEcdsaSecretKey>;
+    }
+
+    // ________________________________________________________________________
+
+    interface SjclRandom {
+        randomWords(nwords: number, paranoia?: number): BitArray;
+        setDefaultParanoia(paranoia: number, allowZeroParanoia: string): void;
+        addEntropy(data: number, estimatedEntropy: number, source: string): void;
+        addEntropy(data: number[], estimatedEntropy: number, source: string): void;
+        addEntropy(data: string, estimatedEntropy: number, source: string): void;
+        isReady(paranoia?: number): boolean;
+        getProgress(paranoia?: number): number;
+        startCollectors(): void;
+        stopCollectors(): void;
+        addEventListener(name: string, cb: Function): void;
+        removeEventListener(name: string, cb: Function): void;
+    }
+
+    interface SjclRandomStatic {
+        new (defaultParanoia: number): SjclRandom;
     }
 
     // ________________________________________________________________________
