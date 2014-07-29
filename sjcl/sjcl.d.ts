@@ -105,7 +105,36 @@
 
         fromBits(bits: BitArray): BigNumber;
         random: TypeHelpers.Bind1<number>;
-        //pseudoMersennePrime
+        prime: {
+            p127: PseudoMersennePrimeStatic;
+            // Bernstein's prime for Curve25519
+            p25519: PseudoMersennePrimeStatic;
+            // Koblitz primes
+            p192k: PseudoMersennePrimeStatic;
+            p224k: PseudoMersennePrimeStatic;
+            p256k: PseudoMersennePrimeStatic;
+            // NIST primes
+            p192: PseudoMersennePrimeStatic;
+            p224: PseudoMersennePrimeStatic;
+            p256: PseudoMersennePrimeStatic;
+            p384: PseudoMersennePrimeStatic;
+            p521: PseudoMersennePrimeStatic;
+        };
+
+        pseudoMersennePrime(exponent: number, coeff: number[][]): PseudoMersennePrimeStatic;
+    }
+
+    interface PseudoMersennePrime extends BigNumber {
+        reduce(): PseudoMersennePrime;
+        fullReduce(): PseudoMersennePrime;
+        inverse(): PseudoMersennePrime;
+    }
+
+    interface PseudoMersennePrimeStatic extends BigNumberStatic {
+        new (): PseudoMersennePrime;
+        new (n: string): PseudoMersennePrime;
+        new (n: number): PseudoMersennePrime;
+        new (n: BigNumber): PseudoMersennePrime;
     }
 
     // ________________________________________________________________________
@@ -240,7 +269,6 @@
     } 
 
     // ________________________________________________________________________
-
 
     interface SjclMisc {
         pbkdf2(password: string, salt: string, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
