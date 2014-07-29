@@ -5,6 +5,7 @@
     export var codec: SjclCodecs;
     export var hash: SjclHashes;
     export var exception: SjclExceptions;
+    export var cipher: SjclCiphers;
 
     // ________________________________________________________________________
 
@@ -189,6 +190,21 @@
 
     interface SjclExceptionFactory {
         new (message: string): Error;
+    }
+
+    // ________________________________________________________________________
+
+    interface SjclCiphers {
+        aes: SjclCipherStatic;
+    }
+
+    interface SjclCipher {
+        encrypt(data: number[]): number[];
+        decrypt(data: number[]): number[];
+    }
+
+    interface SjclCipherStatic {
+        new (key: number[]): SjclCipher;
     }
 
     module TypeHelpers {
