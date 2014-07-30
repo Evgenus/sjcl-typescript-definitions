@@ -282,10 +282,10 @@
     }
 
     interface SjclMisc {
-        pbkdf2(password: string, salt: string, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
-        pbkdf2(password: BitArray, salt: string, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
-        pbkdf2(password: BitArray, salt: BitArray, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
-        pbkdf2(password: string, salt: BitArray, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
+        pbkdf2(password: string, salt: string, count?: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
+        pbkdf2(password: BitArray, salt: string, count?: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
+        pbkdf2(password: BitArray, salt: BitArray, count?: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
+        pbkdf2(password: string, salt: BitArray, count?: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
         hmac: SjclHmacStatic;
         cachedPbkdf2(password: string, obj?: Pbkdf2Params): {
             key: BitArray;
@@ -311,7 +311,7 @@
         new (key: BitArray): SjclPseudorandomFunctionFamily;
     }
 
-    interface SjclHmacStatic extends SjclPseudorandomFunctionFamilyStatic {
+    interface SjclHmacStatic {
         new (key: BitArray, Hash?: SjclHashStatic): SjclHmac;
     }
 

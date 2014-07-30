@@ -184,3 +184,41 @@ function testSymetric() {
     ba = sjcl.mode.ocb2.encrypt(aes, ba, ba, ba, 128, false);
 }
 
+function testHmacPbdkf2() {
+    ba = sjcl.misc.pbkdf2("xxx", "xxx");
+    ba = sjcl.misc.pbkdf2("xxx", "xxx", 1000);
+    ba = sjcl.misc.pbkdf2("xxx", "xxx", 1000, 12);
+    ba = sjcl.misc.pbkdf2("xxx", "xxx", 1000, 12, sjcl.misc.hmac);
+
+    ba = sjcl.misc.pbkdf2("xxx", ba);
+    ba = sjcl.misc.pbkdf2("xxx", ba, 1000);
+    ba = sjcl.misc.pbkdf2("xxx", ba, 1000, 12);
+    ba = sjcl.misc.pbkdf2("xxx", ba, 1000, 12, sjcl.misc.hmac);
+
+    ba = sjcl.misc.pbkdf2(ba, "xxx");
+    ba = sjcl.misc.pbkdf2(ba, "xxx", 1000);
+    ba = sjcl.misc.pbkdf2(ba, "xxx", 1000, 12);
+    ba = sjcl.misc.pbkdf2(ba, "xxx", 1000, 12, sjcl.misc.hmac);
+
+    ba = sjcl.misc.pbkdf2(ba, ba);
+    ba = sjcl.misc.pbkdf2(ba, ba, 1000);
+    ba = sjcl.misc.pbkdf2(ba, ba, 1000, 12);
+    ba = sjcl.misc.pbkdf2(ba, ba, 1000, 12, sjcl.misc.hmac);
+
+    var hmac: sjcl.SjclHmac;
+    hmac = new sjcl.misc.hmac(ba);
+    hmac = new sjcl.misc.hmac(ba, sjcl.hash.sha512);
+
+    ba = hmac.mac("xxx");
+    ba = hmac.mac(ba);
+
+    ba = hmac.encrypt("xxx");
+    ba = hmac.encrypt(ba);
+
+    hmac.reset();
+
+    hmac.update("xxx");
+    hmac.update(ba);
+
+    ba = hmac.digest();
+}
