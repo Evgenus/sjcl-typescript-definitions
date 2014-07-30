@@ -261,4 +261,7 @@ function testConvenince() {
 
     sjcl.encrypt("xxx", "text", { iv: ba, salt: ba, mode: "gcm" }, x);
     s = sjcl.decrypt(ba, x, { iv: ba, salt: ba, mode: "gcm" }, y);
+
+    sjcl.encrypt("xxx", "text", { iv: ba, salt: ba, mode: "gcm", iter: 200 }, x);
+    s = sjcl.decrypt(ba, x, { iv: ba, salt: ba, mode: "gcm", iter: 200 }, y);
 }
