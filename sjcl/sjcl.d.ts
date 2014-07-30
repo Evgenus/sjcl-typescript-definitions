@@ -8,6 +8,7 @@
     export var cipher: SjclCiphers;
     export var mode: SjclModes;
     export var misc: SjclMisc;
+    export var ecc: SjclEllipticCurveCryptography;
     export var random: SjclRandom;
     export var prng: SjclRandomStatic;
     export var keyexchange: SjclKeyExchange;
@@ -293,7 +294,7 @@
         };
     }
 
-    interface SjclPseudorandomFunctionFamily {
+    class SjclPseudorandomFunctionFamily {
         encrypt(data: string): BitArray;
         encrypt(data: BitArray): BitArray;
     }
@@ -375,7 +376,8 @@
     }
 
     interface SjclKeysGenerator<P extends SjclECCPublicKey, S extends SjclECCSecretKey> {
-        (curve: SjclEllipticalCurve, paranoia: number, sec: BigNumber): SjclKeyPair<P, S>;
+        (curve: SjclEllipticalCurve, paranoia: number, sec?: BigNumber): SjclKeyPair<P, S>;
+        (curve: number, paranoia: number, sec?: BigNumber): SjclKeyPair<P, S>;
     }
 
     interface SjclECCPublicKeyData {
@@ -473,6 +475,7 @@
         makeVerifier(username: string, password: string, salt: BitArray, group: SjclSRPGroup): BitArray;
         makeX(username: string, password: string, salt: BitArray): BitArray;
         knownGroup(i: string): SjclSRPGroup;
+        knownGroup(i: number): SjclSRPGroup;
     }
 
     // ________________________________________________________________________
@@ -509,11 +512,13 @@
     interface SjclConveninceEncryptor {
         (password: string, plaintext: string, params?: SjclCipherEncryptParams, rp?: SjclCipherEncrypted): SjclCipherEncrypted;
         (password: BitArray, plaintext: string, params?: SjclCipherEncryptParams, rp?: SjclCipherEncrypted): SjclCipherEncrypted;
+        (password: SjclElGamalPublicKey, plaintext: string, params?: SjclCipherEncryptParams, rp?: SjclCipherEncrypted): SjclCipherEncrypted;
     }
 
     interface SjclConveninceDecryptor {
         (password: string, ciphertext: SjclCipherEncrypted, params?: SjclCipherDecryptParams, rp?: SjclCipherDecrypted): string;
         (password: BitArray, ciphertext: SjclCipherEncrypted, params?: SjclCipherDecryptParams, rp?: SjclCipherDecrypted): string;
+        (password: SjclElGamalSecretKey, ciphertext: SjclCipherEncrypted, params?: SjclCipherDecryptParams, rp?: SjclCipherDecrypted): string;
     }
 
     interface SjclJson {

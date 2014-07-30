@@ -7,124 +7,124 @@ var bn: sjcl.BigNumber;
 var ba: sjcl.BitArray;
 
 function testBigNumber() {
-bn = new sjcl.bn();
-bn = new sjcl.bn(0);
-bn = new sjcl.bn("0");
-bn = new sjcl.bn(bn);
+    bn = new sjcl.bn();
+    bn = new sjcl.bn(0);
+    bn = new sjcl.bn("0");
+    bn = new sjcl.bn(bn);
 
-bn = bn.initWith(0);
-bn = bn.initWith("0");
-bn = bn.initWith(bn);
+    bn = bn.initWith(0);
+    bn = bn.initWith("0");
+    bn = bn.initWith(bn);
 
-bn = bn.addM(0);
-bn = bn.addM("0");
-bn = bn.addM(bn);
+    bn = bn.addM(0);
+    bn = bn.addM("0");
+    bn = bn.addM(bn);
 
-bn = bn.subM(0);
-bn = bn.subM("0");
-bn = bn.subM(bn);
+    bn = bn.subM(0);
+    bn = bn.subM("0");
+    bn = bn.subM(bn);
 
-bn = bn.mod(0);
-bn = bn.mod("0");
-bn = bn.mod(bn);
+    bn = bn.mod(0);
+    bn = bn.mod("0");
+    bn = bn.mod(bn);
 
-bn = bn.inverseMod(0);
-bn = bn.inverseMod("0");
-bn = bn.inverseMod(bn);
+    bn = bn.inverseMod(0);
+    bn = bn.inverseMod("0");
+    bn = bn.inverseMod(bn);
 
-bn = bn.add(0);
-bn = bn.add("0");
-bn = bn.add(bn);
+    bn = bn.add(0);
+    bn = bn.add("0");
+    bn = bn.add(bn);
 
-bn = bn.sub(0);
-bn = bn.sub("0");
-bn = bn.sub(bn);
+    bn = bn.sub(0);
+    bn = bn.sub("0");
+    bn = bn.sub(bn);
 
-bn = bn.mul(0);
-bn = bn.mul("0");
-bn = bn.mul(bn);
+    bn = bn.mul(0);
+    bn = bn.mul("0");
+    bn = bn.mul(bn);
 
-bn = bn.mulmod(0, 0);
-bn = bn.mulmod(0, "0");
-bn = bn.mulmod(0, bn);
-bn = bn.mulmod("0", 0);
-bn = bn.mulmod("0", "0");
-bn = bn.mulmod("0", bn);
-bn = bn.mulmod(bn, 0);
-bn = bn.mulmod(bn, "0");
-bn = bn.mulmod(bn, bn);
+    bn = bn.mulmod(0, 0);
+    bn = bn.mulmod(0, "0");
+    bn = bn.mulmod(0, bn);
+    bn = bn.mulmod("0", 0);
+    bn = bn.mulmod("0", "0");
+    bn = bn.mulmod("0", bn);
+    bn = bn.mulmod(bn, 0);
+    bn = bn.mulmod(bn, "0");
+    bn = bn.mulmod(bn, bn);
 
-bn = bn.powermod(0, 0);
-bn = bn.powermod(0, "0");
-bn = bn.powermod(0, bn);
-bn = bn.powermod("0", 0);
-bn = bn.powermod("0", "0");
-bn = bn.powermod("0", bn);
-bn = bn.powermod(bn, 0);
-bn = bn.powermod(bn, "0");
-bn = bn.powermod(bn, bn);
+    bn = bn.powermod(0, 0);
+    bn = bn.powermod(0, "0");
+    bn = bn.powermod(0, bn);
+    bn = bn.powermod("0", 0);
+    bn = bn.powermod("0", "0");
+    bn = bn.powermod("0", bn);
+    bn = bn.powermod(bn, 0);
+    bn = bn.powermod(bn, "0");
+    bn = bn.powermod(bn, bn);
 
-bn = bn.copy();
+    bn = bn.copy();
 
-b = bn.equals(0);
-b = bn.equals(bn);
+    b = bn.equals(0);
+    b = bn.equals(bn);
 
-b = bn.greaterEquals(0);
-b = bn.greaterEquals(bn);
+    b = bn.greaterEquals(0);
+    b = bn.greaterEquals(bn);
 
-n = bn.getLimb(0);
+    n = bn.getLimb(0);
 
-s = bn.toString();
+    s = bn.toString();
 
-bn = bn.doubleM();
+    bn = bn.doubleM();
 
-bn = bn.halveM();
+    bn = bn.halveM();
 
-bn = bn.square();
+    bn = bn.square();
 
-bn = bn.power(1);
-bn = bn.power([1, 1]);
-bn = bn.power(bn);
+    bn = bn.power(1);
+    bn = bn.power([1, 1]);
+    bn = bn.power(bn);
 
-bn = bn.trim();
+    bn = bn.trim();
 
-bn = bn.reduce();
+    bn = bn.reduce();
 
-bn = bn.fullReduce();
+    bn = bn.fullReduce();
 
-bn = bn.normalize();
+    bn = bn.normalize();
 
-bn = bn.cnormalize();
+    bn = bn.cnormalize();
 
-ba = bn.toBits();
-ba = bn.toBits(1);
+    ba = bn.toBits();
+    ba = bn.toBits(1);
 
-n = bn.bitLength();
+    n = bn.bitLength();
 
-bn = sjcl.bn.fromBits(ba);
+    bn = sjcl.bn.fromBits(ba);
 }
 
 function testBitArray() {
-ba = sjcl.bitArray.bitSlice(ba, 0, 1);
+    ba = sjcl.bitArray.bitSlice(ba, 0, 1);
 
-n = sjcl.bitArray.extract(ba, 0, 1);
+    n = sjcl.bitArray.extract(ba, 0, 1);
 
-ba = sjcl.bitArray.concat(ba, ba);
+    ba = sjcl.bitArray.concat(ba, ba);
 
-n = sjcl.bitArray.bitLength(ba);
+    n = sjcl.bitArray.bitLength(ba);
 
-ba = sjcl.bitArray.clamp(ba, 0);
+    ba = sjcl.bitArray.clamp(ba, 0);
 
-n = sjcl.bitArray.partial(1, 1);
-n = sjcl.bitArray.partial(1, 1, 0);
+    n = sjcl.bitArray.partial(1, 1);
+    n = sjcl.bitArray.partial(1, 1, 0);
 
-n = sjcl.bitArray.getPartial(0);
+    n = sjcl.bitArray.getPartial(0);
 
-b = sjcl.bitArray.equal(ba, ba);
+    b = sjcl.bitArray.equal(ba, ba);
 
-ba = sjcl.bitArray._shiftRight(ba, 0);
-ba = sjcl.bitArray._shiftRight(ba, 0, 0);
-ba = sjcl.bitArray._shiftRight(ba, 0, 0, ba);
+    ba = sjcl.bitArray._shiftRight(ba, 0);
+    ba = sjcl.bitArray._shiftRight(ba, 0, 0);
+    ba = sjcl.bitArray._shiftRight(ba, 0, 0, ba);
 }
 
 function testCodecs() {
@@ -221,4 +221,44 @@ function testHmacPbdkf2() {
     hmac.update(ba);
 
     ba = hmac.digest();
+}
+
+function testECC() {
+    var keys = sjcl.ecc.elGamal.generateKeys(192, 0);
+
+    var ciphertext = sjcl.encrypt(keys.pub, "hello world");
+    var plaintext = sjcl.decrypt(keys.sec, ciphertext);
+
+    // TODO: Maybe deeper testing required. Let me know
+}
+
+function testRandom() {
+    b = sjcl.random.isReady();
+    ba = sjcl.random.randomWords(8);
+    ba = sjcl.random.randomWords(8, 6);
+
+    var rnd = new sjcl.prng(1);
+    ba = rnd.randomWords(16);
+    ba = rnd.randomWords(16, 6);
+}
+
+function testSRP() {
+    var group = sjcl.keyexchange.srp.knownGroup(1024);
+    ba = sjcl.codec.hex.toBits(s);
+    ba = sjcl.keyexchange.srp.makeX(s, s, ba);
+    ba = sjcl.keyexchange.srp.makeVerifier(s, s, ba, group);
+}
+
+function testConvenince() {
+    var x: sjcl.SjclCipherEncrypted;
+    x = sjcl.encrypt("xxx", "text");
+    s = sjcl.decrypt(ba, x);
+
+    x = sjcl.encrypt("xxx", "text", { iv: ba, salt: ba });
+    s = sjcl.decrypt(ba, x, { iv: ba, salt: ba });
+
+    var y: sjcl.SjclCipherDecrypted;
+
+    sjcl.encrypt("xxx", "text", { iv: ba, salt: ba, mode: "gcm" }, x);
+    s = sjcl.decrypt(ba, x, { iv: ba, salt: ba, mode: "gcm" }, y);
 }
