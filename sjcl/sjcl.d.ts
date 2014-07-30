@@ -254,24 +254,24 @@
     }
 
     interface SjclGCMMode {
-        encrypt(prp: any, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
-        decrypt(prp: any, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+        encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+        decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
     } 
 
     interface SjclCCMMode {
-        encrypt(prp: any, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
-        decrypt(prp: any, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+        encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+        decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
     } 
 
     interface SjclOCB2Mode {
-        encrypt(prp: any, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number, premac?: boolean): BitArray;
-        decrypt(prp: any, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number, premac?: boolean): BitArray;
+        encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number, premac?: boolean): BitArray;
+        decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number, premac?: boolean): BitArray;
         pmac(prp: SjclCipher, adata: BitArray): number[];
     } 
 
     interface SjclCBCMode {
-        encrypt(prp: any, plaintext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
-        decrypt(prp: any, ciphertext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
+        encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
+        decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
     } 
 
     // ________________________________________________________________________

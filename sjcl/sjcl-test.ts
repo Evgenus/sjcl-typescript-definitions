@@ -163,3 +163,24 @@ function testHashes() {
     ba = sjcl.hash.sha512.hash(ba);
     ba = sjcl.hash.sha512.hash("xxx");
 }
+
+function testSymetric() {
+    var aes = new sjcl.cipher.aes([0, 0, 0, 0]);
+
+    ba = sjcl.mode.cbc.encrypt(aes, ba, ba);
+    ba = sjcl.mode.cbc.encrypt(aes, ba, ba, ba);
+
+    ba = sjcl.mode.gcm.encrypt(aes, ba, ba);
+    ba = sjcl.mode.gcm.encrypt(aes, ba, ba, ba);
+    ba = sjcl.mode.gcm.encrypt(aes, ba, ba, ba, 128);
+
+    ba = sjcl.mode.ccm.encrypt(aes, ba, ba);
+    ba = sjcl.mode.ccm.encrypt(aes, ba, ba, ba);
+    ba = sjcl.mode.ccm.encrypt(aes, ba, ba, ba, 128);
+
+    ba = sjcl.mode.ocb2.encrypt(aes, ba, ba);
+    ba = sjcl.mode.ocb2.encrypt(aes, ba, ba, ba);
+    ba = sjcl.mode.ocb2.encrypt(aes, ba, ba, ba, 128);
+    ba = sjcl.mode.ocb2.encrypt(aes, ba, ba, ba, 128, false);
+}
+
