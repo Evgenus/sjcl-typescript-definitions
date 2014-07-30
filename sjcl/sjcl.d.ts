@@ -11,6 +11,9 @@
     export var random: SjclRandom;
     export var prng: SjclRandomStatic;
     export var keyexchange: SjclKeyExchange;
+    export var json: SjclJson;
+    export var encrypt: SjclConveninceEncryptor;
+    export var decrypt: SjclConveninceDecryptor;
 
     // ________________________________________________________________________
 
@@ -273,12 +276,21 @@
 
     // ________________________________________________________________________
 
+    interface Pbkdf2Params {
+        iter?: number;
+        salt?: BitArray;
+    }
+
     interface SjclMisc {
         pbkdf2(password: string, salt: string, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
         pbkdf2(password: BitArray, salt: string, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
         pbkdf2(password: BitArray, salt: BitArray, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
         pbkdf2(password: string, salt: BitArray, count: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
         hmac: SjclHmacStatic;
+        cachedPbkdf2(password: string, obj?: Pbkdf2Params): {
+            key: BitArray;
+            salt: BitArray;
+        };
     }
 
     interface SjclPseudorandomFunctionFamily {
@@ -461,6 +473,54 @@
         makeVerifier(username: string, password: string, salt: BitArray, group: SjclSRPGroup): BitArray;
         makeX(username: string, password: string, salt: BitArray): BitArray;
         knownGroup(i: string): SjclSRPGroup;
+    }
+
+    // ________________________________________________________________________
+
+    interface SjclCipherParams {
+        v?: number;
+        iter?: number;
+        ks?: number;
+        ts?: number;
+        mode?: string;
+        adata?: string;
+        cipher?: string;
+    }
+
+    interface SjclCipherEncryptParams extends SjclCipherParams {
+        salt: BitArray;
+        iv: BitArray;
+    }
+
+    interface SjclCipherDecryptParams extends SjclCipherParams {
+        salt?: BitArray;
+        iv?: BitArray;
+    }
+
+    interface SjclCipherEncrypted extends SjclCipherEncryptParams {
+        kemtag?: BitArray;
+        ct: BitArray;
+    }
+
+    interface SjclCipherDecrypted extends SjclCipherEncrypted {
+        key: BitArray;
+    }
+
+    interface SjclConveninceEncryptor {
+        (password: string, plaintext: string, params?: SjclCipherEncryptParams, rp?: SjclCipherEncrypted): SjclCipherEncrypted;
+        (password: BitArray, plaintext: string, params?: SjclCipherEncryptParams, rp?: SjclCipherEncrypted): SjclCipherEncrypted;
+    }
+
+    interface SjclConveninceDecryptor {
+        (password: string, ciphertext: SjclCipherEncrypted, params?: SjclCipherDecryptParams, rp?: SjclCipherDecrypted): string;
+        (password: BitArray, ciphertext: SjclCipherEncrypted, params?: SjclCipherDecryptParams, rp?: SjclCipherDecrypted): string;
+    }
+
+    interface SjclJson {
+        encrypt: SjclConveninceEncryptor;
+        decrypt: SjclConveninceDecryptor;
+        encode(obj: Object): string;
+        decode(obj: string): Object;
     }
 
     // ________________________________________________________________________
