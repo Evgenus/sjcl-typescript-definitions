@@ -6,6 +6,7 @@ var s: string;
 var bn: sjcl.BigNumber;
 var ba: sjcl.BitArray;
 
+function testBigNumber() {
 bn = new sjcl.bn();
 bn = new sjcl.bn(0);
 bn = new sjcl.bn("0");
@@ -101,7 +102,9 @@ ba = bn.toBits(1);
 n = bn.bitLength();
 
 bn = sjcl.bn.fromBits(ba);
+}
 
+function testBitArray() {
 ba = sjcl.bitArray.bitSlice(ba, 0, 1);
 
 n = sjcl.bitArray.extract(ba, 0, 1);
@@ -122,4 +125,22 @@ b = sjcl.bitArray.equal(ba, ba);
 ba = sjcl.bitArray._shiftRight(ba, 0);
 ba = sjcl.bitArray._shiftRight(ba, 0, 0);
 ba = sjcl.bitArray._shiftRight(ba, 0, 0, ba);
+}
+
+function testCodecs() {
+    s = sjcl.codec.base64.fromBits(ba);
+    ba = sjcl.codec.base64.toBits(s);
+
+    s = sjcl.codec.base64url.fromBits(ba);
+    ba = sjcl.codec.base64url.toBits(s);
+
+    s = sjcl.codec.hex.fromBits(ba);
+    ba = sjcl.codec.hex.toBits(s);
+
+    s = sjcl.codec.utf8String.fromBits(ba);
+    ba = sjcl.codec.utf8String.toBits(s);
+
+    var bytes: number[] = sjcl.codec.bytes.fromBits(ba);
+    ba = sjcl.codec.bytes.toBits(bytes);
+}
 
