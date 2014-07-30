@@ -144,3 +144,22 @@ function testCodecs() {
     ba = sjcl.codec.bytes.toBits(bytes);
 }
 
+function testHashes() {
+    var hash: sjcl.SjclHash;
+    ba = hash.reset().update("xxx").update(ba).finalize();
+
+    hash = new sjcl.hash.sha1();
+    hash = new sjcl.hash.sha1(hash);
+    ba = sjcl.hash.sha1.hash(ba);
+    ba = sjcl.hash.sha1.hash("xxx");
+
+    hash = new sjcl.hash.sha256();
+    hash = new sjcl.hash.sha256(hash);
+    ba = sjcl.hash.sha256.hash(ba);
+    ba = sjcl.hash.sha256.hash("xxx");
+
+    hash = new sjcl.hash.sha512();
+    hash = new sjcl.hash.sha512(hash);
+    ba = sjcl.hash.sha512.hash(ba);
+    ba = sjcl.hash.sha512.hash("xxx");
+}
