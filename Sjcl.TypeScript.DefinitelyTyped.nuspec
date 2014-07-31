@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Sjcl.TypeScript.DefinitelyTyped</id>
+    <version>1.0.1.0</version>
+    <authors>Evgenus</authors>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/Evgenus/sjcl-typescript-definitions</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Typescript definitions files for Stanford Javascript Crypto Library</description>
+    <releaseNotes>Initial publishing</releaseNotes>
+    <tags>sjcl crypto stanford definitions typescript</tags>
+  </metadata>
+  <files>
+    <file src="README.md" target="" />
+    <file src="sjcl\*.ts" target="src" />
+  </files>
+</package>

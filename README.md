@@ -5,9 +5,13 @@ Typescript definitions files for [Stanford Javascript Crypto Library](https://gi
 
 This code was detached from [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped) to have repository unrestricted with community rules.
 
-Install via NPM:
+Install with NPM:
 
     npm install sjcl-typescript-definitions
+
+Install with NuGet:
+
+    PM> Install-Package Sjcl.TypeScript.DefinitelyTyped 
 
 Testing:
 
