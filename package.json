@@ -1,0 +1,28 @@
+{
+  "name": "sjcl-typescript-definitions",
+  "version": "1.0.1-0",
+  "description": "Typescript definitions files for Stanford Javascript Crypto Library",
+  "scripts": {
+    "test": "tsc --noImplicitAny --outDir temp --module commonjs sjcl/sjcl-tests.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Evgenus/sjcl-typescript-definitions"
+  },
+  "keywords": [
+    "typesctipt",
+    "sjcl",
+    "crypto",
+    "stanford",
+    "definitions"
+  ],
+  "author": "Eugene Chernyshov <chernyshov.eugene@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Evgenus/sjcl-typescript-definitions/issues"
+  },
+  "homepage": "https://github.com/Evgenus/sjcl-typescript-definitions",
+  "devDependencies": {
+    "typescript": "^1.0.1"
+  }
+}
