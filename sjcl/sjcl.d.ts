@@ -1,4 +1,9 @@
-﻿declare module sjcl {
+﻿// Type definitions for sjcl v1.0.1
+// Project: http://crypto.stanford.edu/sjcl/
+// Definitions by: Eugene Chernyshov <https://github.com/Evgenus>
+// Definitions: https://github.com/borisyankov/DefinitelyTyped
+
+declare module sjcl {
 
     export var bn: BigNumberStatic;
     export var bitArray: BitArrayStatic;
