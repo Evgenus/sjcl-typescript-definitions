@@ -7,9 +7,135 @@
 // For answers, fixes and cutting edge version please see development repository.
 declare module sjcl {
 
+    /**
+     * Module for encoding/decoding bitArray into various representations.
+     */
+    module codec {
+
+        /**
+         * UTF-8 strings.
+         */
+        module utf8String {
+
+            /**
+             * Convert from a bitArray to a UTF-8 string.
+             *
+             * @param {BitArray} bits The source BitArray object.
+             *
+             * @return {string} A string.
+             */
+            export function fromBits(bits: BitArray): string;
+
+            /**
+             * Convert from a UTF-8 string to a bitArray.
+             *
+             * @param {string} value The source string value.
+             *
+             * @return {BitArray} value as a BitArray.
+             */
+            export function toBits(value: string): BitArray;
+        }
+
+        /**
+         * Hexadecimal.
+         */
+        module hex {
+
+            /**
+             * Convert from a bitArray to a hex string.
+             *
+             * @param {BitArray} bits The source BitArray object.
+             *
+             * @return {string} A string.
+             */
+            export function fromBits(bits: BitArray): string;
+
+            /**
+             * Convert from a hex string to a bitArray.
+             *
+             * @param {string} value The source string with hexes.
+             *
+             * @return {BitArray} value as a BitArray.
+             */
+            export function toBits(value: string): BitArray;
+        }
+
+        /**
+         * Base64 encoding/decoding.
+         */
+        module base64 {
+
+            /**
+             * Convert from a bitArray to a base64 string.
+             *
+             * @param {BitArray} bits The source BitArray object.
+             *
+             * @return {string} A string.
+             */
+            export function fromBits(bits: BitArray): string;
+
+            /**
+             * Convert from a base64 string to a bitArray.
+             *
+             * @param {string} value The source string with base64 representation.
+             *
+             * @return {BitArray} value as a BitArray.
+             */
+            export function toBits(value: string): BitArray;
+        }
+
+        /**
+         * Base64 encoding/decoding.
+         */
+        module base64url {
+
+            /**
+             * Convert from a bitArray to a base64 string.
+             *
+             * @param {BitArray} bits The source BitArray object.
+             *
+             * @return {string} A string.
+             */
+            export function fromBits(bits: BitArray): string;
+
+            /**
+             * Convert from a base64 string to a bitArray.
+             *
+             * @param {string} value The source string with base64 representation suitable for inserting into
+             *                       URLs.
+             *
+             * @return {BitArray} value as a BitArray.
+             */
+            export function toBits(value: string): BitArray;
+        }
+
+        /**
+         * Arrays of bytes.
+         */
+        module bytes {
+
+            /**
+             * Convert from a bitArray to an array of bytes.
+             *
+             * @param {BitArray} bits The source BitArray object.
+             *
+             * @return {number[]} A array of numbers where each item represents byte.
+             */
+            export function fromBits(bits: BitArray): number[];
+
+            /**
+             * Convert from an array of bytes to a bitArray.
+             *
+             * @param {number[]} value The source array of numbers where each item represents byte.
+             *
+             * @return {BitArray} value as a BitArray.
+             */
+            export function toBits(value: number[]): BitArray;
+        }
+    }
+
     export var bn: BigNumberStatic;
     export var bitArray: BitArrayStatic;
-    export var codec: SjclCodecs;
     export var hash: SjclHashes;
     export var exception: SjclExceptions;
     export var cipher: SjclCiphers;
@@ -186,21 +312,6 @@ declare module sjcl {
 
         /// xor a block of 4 words together.
         _xor4(x: number[], y: number[]): number[];
-    }
-
-    // ________________________________________________________________________
-
-    interface SjclCodec<T> {
-        fromBits(bits: BitArray): T;
-        toBits(value: T): BitArray;
-    }
-
-    interface SjclCodecs {
-        utf8String: SjclCodec<string>;
-        hex: SjclCodec<string>;
-        bytes: SjclCodec<number[]>;
-        base64: SjclCodec<string>;
-        base64url: SjclCodec<string>;
     }
 
     // ________________________________________________________________________
