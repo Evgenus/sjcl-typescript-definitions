@@ -8,7 +8,7 @@
 declare module sjcl {
 
     /**
-     * Module for encoding/decoding bitArray into various representations.
+     * Module for encoding/decoding BitArray into various representations.
      */
     module codec {
 
@@ -18,7 +18,7 @@ declare module sjcl {
         module utf8String {
 
             /**
-             * Convert from a bitArray to a UTF-8 string.
+             * Convert from a BitArray to a UTF-8 string.
              *
              * @param {BitArray} bits The source BitArray object.
              *
@@ -27,7 +27,7 @@ declare module sjcl {
             export function fromBits(bits: BitArray): string;
 
             /**
-             * Convert from a UTF-8 string to a bitArray.
+             * Convert from a UTF-8 string to a BitArray.
              *
              * @param {string} value The source string value.
              *
@@ -42,7 +42,7 @@ declare module sjcl {
         module hex {
 
             /**
-             * Convert from a bitArray to a hex string.
+             * Convert from a BitArray to a hex string.
              *
              * @param {BitArray} bits The source BitArray object.
              *
@@ -51,7 +51,7 @@ declare module sjcl {
             export function fromBits(bits: BitArray): string;
 
             /**
-             * Convert from a hex string to a bitArray.
+             * Convert from a hex string to a BitArray.
              *
              * @param {string} value The source string with hexes.
              *
@@ -66,7 +66,7 @@ declare module sjcl {
         module base64 {
 
             /**
-             * Convert from a bitArray to a base64 string.
+             * Convert from a BitArray to a base64 string.
              *
              * @param {BitArray} bits The source BitArray object.
              *
@@ -75,7 +75,7 @@ declare module sjcl {
             export function fromBits(bits: BitArray): string;
 
             /**
-             * Convert from a base64 string to a bitArray.
+             * Convert from a base64 string to a BitArray.
              *
              * @param {string} value The source string with base64 representation.
              *
@@ -90,7 +90,7 @@ declare module sjcl {
         module base64url {
 
             /**
-             * Convert from a bitArray to a base64 string.
+             * Convert from a BitArray to a base64 string.
              *
              * @param {BitArray} bits The source BitArray object.
              *
@@ -99,7 +99,7 @@ declare module sjcl {
             export function fromBits(bits: BitArray): string;
 
             /**
-             * Convert from a base64 string to a bitArray.
+             * Convert from a base64 string to a BitArray.
              *
              * @param {string} value The source string with base64 representation suitable for inserting into
              *                       URLs.
@@ -115,7 +115,7 @@ declare module sjcl {
         module bytes {
 
             /**
-             * Convert from a bitArray to an array of bytes.
+             * Convert from a BitArray to an array of bytes.
              *
              * @param {BitArray} bits The source BitArray object.
              *
@@ -124,7 +124,7 @@ declare module sjcl {
             export function fromBits(bits: BitArray): number[];
 
             /**
-             * Convert from an array of bytes to a bitArray.
+             * Convert from an array of bytes to a BitArray.
              *
              * @param {number[]} value The source array of numbers where each item represents byte.
              *
@@ -134,8 +134,121 @@ declare module sjcl {
         }
     }
 
+    interface BitArray extends Array<number> {
+    }
+
+    module bitArray {
+
+        /**
+         * Array slices in units of bits.
+         *
+         * @param {BitArray} a    The array to slice.
+         * @param {number} bstart The offset to the start of the slice, in bits.
+         * @param {number} bend   The offset to the end of the slice, in bits.  If this is undefined, slice
+         *                        until the end of the array.
+         *
+         * @return {BitArray} The requested slice.
+         */
+        export function bitSlice(a: BitArray, bstart: number, bend: number): BitArray;
+
+        /**
+         * Extract a number packed into a bit array.
+         *
+         * @param {BitArray} a    The array to slice.
+         * @param {number} bstart The offset to the start of the slice, in bits.
+         * @param {number} blenth The length of the number to extract.
+         *
+         * @return {number} The requested slice.
+         */
+        export function extract(a: BitArray, bstart: number, blenth: number): number;
+
+        /**
+         * Concatenate two bit arrays.
+         *
+         * @param {BitArray} a1 The first array.
+         * @param {BitArray} a2 The second array.
+         *
+         * @return {BitArray} The concatenation of a1 and a2.
+         */
+        export function concat(a1: BitArray, a2: BitArray): BitArray
+
+        /**
+         * Find the length of an array of bits.
+         *
+         * @param {BitArray} a The array.
+         *
+         * @return {number} The length of a, in bits.
+         */
+        export function bitLength(a: BitArray): number;
+
+        /**
+         * Truncate an array.
+         *
+         * @param {BitArray} a The array.
+         * @param {number} len The length to truncate to, in bits.
+         *
+         * @return {BitArray} A new array, truncated to len bits.
+         */
+        export function clamp(a: BitArray, len: number): BitArray;
+
+        /**
+         * Make a partial word for a bit array.
+         *
+         * @param {number} len  The number of bits in the word.
+         * @param {number} x    The bits.
+         * @param {number} _end (Optional) _end Pass 1 if x has already been shifted to the high side.
+         *
+         * @return {number} The partial word.
+         */
+        export function partial(len: number, x: number, _end?: number): number;
+
+        /**
+         * Get the number of bits used by a partial word.
+         *
+         * @param {number} x The partial word.
+         *
+         * @return {number} The number of bits used by the partial word.
+         */
+        export function getPartial(x: number): number;
+
+        /**
+         * Compare two arrays for equality in a predictable amount of time.
+         *
+         * @param {BitArray} a The first array.
+         * @param {BitArray} b The second array.
+         *
+         * @return {boolean} true if a == b; false otherwise.
+         */
+        export function equal(a: BitArray, b: BitArray): boolean;
+
+        /**
+         * Shift an array right.
+         * 
+         * @private This function is for internal use.
+         *
+         * @param {BitArray} a   The array to shift.
+         * @param {number} shift The number of bits to shift.
+         * @param {number} carry (Optional) A byte to carry in.
+         * @param {BitArray} out (Optional) An array to prepend to the output.
+         *
+         * @return A BitArray.
+         */
+        export function _shiftRight(a: BitArray, shift: number, carry?: number, out?: BitArray): BitArray;
+
+        /**
+         * xor a block of 4 words together.
+         *
+         * @private This function is for internal use.
+         *
+         * @param {number[]} x The first block of 4 words.
+         * @param {number[]} y The second block of 4 words.
+         *
+         * @return A result block of 4 words as array of numbers.
+         */
+        export function _xor4(x: number[], y: number[]): number[];
+    }
+
     export var bn: BigNumberStatic;
-    export var bitArray: BitArrayStatic;
     export var hash: SjclHashes;
     export var exception: SjclExceptions;
     export var cipher: SjclCiphers;
@@ -275,43 +388,6 @@ declare module sjcl {
         new (n: string): PseudoMersennePrime;
         new (n: number): PseudoMersennePrime;
         new (n: BigNumber): PseudoMersennePrime;
-    }
-
-    // ________________________________________________________________________
-
-    interface BitArray extends Array<number> {
-    }
-
-    interface BitArrayStatic {
-        /// Array slices in units of bits.
-        bitSlice(a: BitArray, bstart: number, bend: number): BitArray;
-
-        /// Extract a number packed into a bit array.
-        extract(a: BitArray, bstart: number, blenth: number): number;
-
-        /// Concatenate two bit arrays.
-        concat(a1: BitArray, a2: BitArray): BitArray
-
-        /// Find the length of an array of bits.
-        bitLength(a: BitArray): number;
-
-        /// Truncate an array.
-        clamp(a: BitArray, len: number): BitArray;
-
-        /// Make a partial word for a bit array.
-        partial(len: number, x: number, _end?: number): number;
-
-        /// Get the number of bits used by a partial word.
-        getPartial(x: number): number;
-
-        /// Compare two arrays for equality in a predictable amount of time.
-        equal(a: BitArray, b: BitArray): boolean;
-
-        /// Shift an array right.
-        _shiftRight(a: BitArray, shift: number, carry?: number, out?: BitArray): BitArray;
-
-        /// xor a block of 4 words together.
-        _xor4(x: number[], y: number[]): number[];
     }
 
     // ________________________________________________________________________
