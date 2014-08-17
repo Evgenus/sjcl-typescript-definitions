@@ -194,9 +194,9 @@ declare module sjcl {
         /**
          * Make a partial word for a bit array.
          *
-         * @param {number} len  The number of bits in the word.
-         * @param {number} x    The bits.
-         * @param {number} _end (Optional) _end Pass 1 if x has already been shifted to the high side.
+         * @param {number} len   The number of bits in the word.
+         * @param {number} x     The bits.
+         * @param {number=} _end (Optional) _end Pass 1 if x has already been shifted to the high side.
          *
          * @return {number} The partial word.
          */
@@ -226,10 +226,10 @@ declare module sjcl {
          * 
          * @private This function is for internal use.
          *
-         * @param {BitArray} a   The array to shift.
-         * @param {number} shift The number of bits to shift.
-         * @param {number} carry (Optional) A byte to carry in.
-         * @param {BitArray} out (Optional) An array to prepend to the output.
+         * @param {BitArray} a    The array to shift.
+         * @param {number} shift  The number of bits to shift.
+         * @param {number=} carry (Optional) A byte to carry in.
+         * @param {BitArray=} out (Optional) An array to prepend to the output.
          *
          * @return {BitArray} A shifted BitArray.
          */
@@ -322,7 +322,7 @@ declare module sjcl {
              *
              * @constructor.
              *
-             * @param {sha1} hash (Optional) the hash to copy.
+             * @param {sha1=} hash (Optional) the hash to copy.
              */
             constructor(hash?: sha1);
 
@@ -394,7 +394,7 @@ declare module sjcl {
              *
              * @constructor.
              *
-             * @param {sha256} hash (Optional) the hash to copy.
+             * @param {sha256=} hash (Optional) the hash to copy.
              */
             constructor(hash?: sha256);
 
@@ -467,7 +467,7 @@ declare module sjcl {
              *
              * @constructor.
              *
-             * @param {sha512} hash (Optional) the hash.
+             * @param {sha512=} hash (Optional) the hash.
              */
             constructor(hash?: sha512);
 
@@ -532,10 +532,208 @@ declare module sjcl {
         }
     }
 
+    module mode {
+
+        /**
+         * @namespace Galois/Counter mode.
+         */
+        module gcm {
+
+            /**
+             * The name of the mode.
+             * @type {string}
+             * @constant Equals to `gcm`.
+             */
+            var name: string;
+
+            /**
+             * Encrypt in GCM mode.
+             * 
+             * @static.
+             *
+             * @param {SjclCipher} prp     The pseudorandom function.  It must have a block size of 16 bytes.
+             * @param {BitArray} plaintext The plaintext data.
+             * @param {BitArray} iv        The initialization value.
+             * @param {BitArray=} adata    (Optional) The authenticated data. Default is [].
+             * @param {number=} tlen       (Optional) The desired tag length, in bits. Default is 128.
+             *
+             * @return {BitArray} The encrypted data, an array of bytes.
+             */
+            export function encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+
+            /**
+             * Decrypt in GCM mode.
+             * 
+             * @static.
+             *
+             * @param {SjclCipher} prp      The pseudorandom function.  It must have a block size of 16 bytes.
+             * @param {BitArray} ciphertext The ciphertext data.
+             * @param {BitArray} iv         The initialization value.
+             * @param {BitArray=} adata     (Optional) The authenticated data. Default is [].
+             * @param {number=} tlen        (Optional) The desired tag length, in bits. Default is 128.
+             *
+             * @return {BitArray} The decrypted data.
+             */
+            export function decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+
+            /**
+             * GCM CTR mode. Encrypt or decrypt data and tag with the prf in GCM-style CTR mode.
+             * 
+             * @private.
+             *
+             * @param {boolean} encrypt True if encrypt, false if decrypt.
+             * @param {SjclCipher} prf  The PRF.
+             * @param {BitArray} data   The data to be encrypted or decrypted.
+             * @param {BitArray} adata  The associated data to be tagged.
+             * @param {BitArray} iv     The initialization vector.
+             * @param {number} tlen     The length of the tag, in bits.
+             *
+             * @return An export.
+             */
+            export function _ctrMode(encrypt, prf, data, adata, iv, tlen): {
+                tag: BitArray;
+                data: BitArray;
+            };
+        }
+
+        /** 
+         * @namespace CBC mode with PKCS#5 padding.
+         *
+         * @deprecated CBC mode is dangerous because it doesn't protect message integrity.
+         */
+        module cbc {
+
+            /**
+             * The name of the mode.
+             * @type {string}
+             * @constant Equals to `cbc`.
+             */
+            var name: string;
+
+            /**
+             * Encrypt in CBC mode with PKCS#5 padding.
+             *
+             * @param {SjclCipher} prp     The block cipher.  It must have a block size of 16 bytes.
+             * @param {BitArray} plaintext The plaintext data.
+             * @param {BitArray} iv        The initialization value.
+             * @param {BitArray=} adata    (Optional) The authenticated data.  Must be empty.
+             *
+             * @return The encrypted data, an array of bytes.
+             */
+            export function encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
+
+            /**
+             * Decrypt in CBC mode.
+             *
+             * @param {SjclCipher} prp      The block cipher.  It must have a block size of 16 bytes.
+             * @param {BitArray} ciphertext The ciphertext data.
+             * @param {BitArray} iv         The initialization value.
+             * @param {BitArray=} adata     (Optional) The authenticated data.  It must be empty.
+             *
+             * @return The decrypted data, an array of bytes.
+             *
+             * @throws {sjcl.exception.invalid} if the IV isn't exactly 128 bits, or if any adata is specified.
+             * @throws {sjcl.exception.corrupt} if if the message is corrupt.
+             */
+            export function decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
+        }
+
+        module ccm {
+
+            /**
+             * The name of the mode.
+             * @type {string}
+             * @constant Equals to `ccm`.
+             */
+            var name: string;
+
+            /**
+             * Encrypt in CCM mode.
+             * @static.
+             *
+             * @param {SjclCipher} prp     The pseudorandom function. It must have a block size of 16 bytes.
+             * @param {BitArray} plaintext The plaintext data.
+             * @param {BitArray} iv        The initialization value.
+             * @param {BitArray=} adata    (Optional) The authenticated data. Default is [].
+             * @param {number=} tlen       (Optional) the desired tag length, in bits. Default is 64.
+             *
+             * @return {BitArray} The encrypted data, an array of bytes.
+             */
+            export function encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+
+            /**
+             * Decrypt in CCM mode.
+             * @static.
+             *
+             * @param {SjclCipher} prp      The pseudorandom function.  It must have a block size of 16 bytes.
+             * @param {BitArray} ciphertext The ciphertext data.
+             * @param {BitArray} iv         The initialization value.
+             * @param {BitArray=} adata     (Optional) adata The authenticated data. Default is [].
+             * @param {number=} tlen        (Optional) tlen the desired tag length, in bits. Default is 64.
+             *
+             * @return {BitArray} The decrypted data.
+             */
+            export function decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
+        }
+
+        module ocb2 {
+
+            /**
+             * The name of the mode.
+             * @type {string}
+             * @constant Equals to `ocb2`.
+             */
+            var name: string;
+
+            /**
+             * Encrypt in OCB mode, version 2.0.
+             *
+             * @param {SjclCipher} prp     The block cipher.  It must have a block size of 16 bytes.
+             * @param {BitArray} plaintext The plaintext data.
+             * @param {BitArray} iv        The initialization value.
+             * @param {BitArray=} adata    (Optional) The authenticated data. Default is [].
+             * @param {number=} tlen       (Optional) the desired tag length, in bits. Default is 64.
+             * @param {boolean=} premac    (Optional) 1 if the authentication data is pre-macced with PMAC.
+             *
+             * @return The encrypted data, an array of bytes.
+             *
+             * @throws {sjcl.exception.invalid} if the IV isn't exactly 128 bits.
+             */
+            export function encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number, premac?: boolean): BitArray;
+
+            /**
+             * Decrypt in OCB mode.
+             *
+             * @param {SjclCipher} prp      The block cipher.  It must have a block size of 16 bytes.
+             * @param {BitArray} ciphertext The ciphertext data.
+             * @param {BitArray} iv         The initialization value.
+             * @param {BitArray=} adata     (Optional) The authenticated data. Default is [].
+             * @param {number=} tlen        (Optional) the desired tag length, in bits. Default is 64.
+             * @param {boolean=} premac     (Optional) true if the authentication data is pre-macced with
+             *                              PMAC. Default is false.
+             *
+             * @return The decrypted data, an array of bytes.
+             *
+             * @throws {sjcl.exception.invalid} if the IV isn't exactly 128 bits.
+             * @throws {sjcl.exception.corrupt} if if the message is corrupt.
+             */
+            export function decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number, premac?: boolean): BitArray;
+
+            /**
+             * PMAC authentication for OCB associated data.
+             *
+             * @param {SjclCipher} prp The block cipher.  It must have a block size of 16 bytes.
+             * @param {BitArray} adata The authenticated data.
+             *
+             * @return {number[]} A number[].
+             */
+            export function pmac(prp: SjclCipher, adata: BitArray): number[];
+        }
+    }
+
     export var bn: BigNumberStatic;
     export var exception: SjclExceptions;
     export var cipher: SjclCiphers;
-    export var mode: SjclModes;
     export var misc: SjclMisc;
     export var ecc: SjclEllipticCurveCryptography;
     export var random: SjclRandom;
@@ -560,10 +758,10 @@ declare module sjcl {
         /// Equality test is in constant time.
         equals(that: number): boolean;
         equals(that: BigNumber): boolean;
-          
+
         /// Get the i'th limb of this, zero if i is too large.
         getLimb(index: number): number;
-  
+
         /// Constant time comparison function.
         /// Returns 1 if this >= that, or zero otherwise.
         greaterEquals(that: number): boolean;
@@ -701,35 +899,6 @@ declare module sjcl {
         new (key: number[]): SjclCipher;
     }
 
-    // ________________________________________________________________________
-
-    interface SjclModes {
-        gcm: SjclGCMMode;
-        ccm: SjclCCMMode;
-        ocb2: SjclOCB2Mode;
-        cbc: SjclCBCMode;
-    }
-
-    interface SjclGCMMode {
-        encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
-        decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
-    } 
-
-    interface SjclCCMMode {
-        encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
-        decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number): BitArray;
-    } 
-
-    interface SjclOCB2Mode {
-        encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number, premac?: boolean): BitArray;
-        decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray, tlen?: number, premac?: boolean): BitArray;
-        pmac(prp: SjclCipher, adata: BitArray): number[];
-    } 
-
-    interface SjclCBCMode {
-        encrypt(prp: SjclCipher, plaintext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
-        decrypt(prp: SjclCipher, ciphertext: BitArray, iv: BitArray, adata?: BitArray): BitArray;
-    } 
 
     // ________________________________________________________________________
 
@@ -815,7 +984,7 @@ declare module sjcl {
     }
 
     interface SjclPointJacobianStatic {
-        new (curve: SjclEllipticalCurve, x?: BigNumber, y?: BigNumber, z?: BigNumber):SjclPointJacobian;
+        new (curve: SjclEllipticalCurve, x?: BigNumber, y?: BigNumber, z?: BigNumber): SjclPointJacobian;
     }
 
     interface SjclEllipticalCurve {
