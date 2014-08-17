@@ -170,18 +170,34 @@ function testSymetric() {
     ba = sjcl.mode.cbc.encrypt(aes, ba, ba);
     ba = sjcl.mode.cbc.encrypt(aes, ba, ba, ba);
 
+    ba = sjcl.mode.cbc.decrypt(aes, ba, ba);
+    ba = sjcl.mode.cbc.decrypt(aes, ba, ba, ba);
+
     ba = sjcl.mode.gcm.encrypt(aes, ba, ba);
     ba = sjcl.mode.gcm.encrypt(aes, ba, ba, ba);
     ba = sjcl.mode.gcm.encrypt(aes, ba, ba, ba, 128);
+
+    ba = sjcl.mode.gcm.decrypt(aes, ba, ba);
+    ba = sjcl.mode.gcm.decrypt(aes, ba, ba, ba);
+    ba = sjcl.mode.gcm.decrypt(aes, ba, ba, ba, 128);
 
     ba = sjcl.mode.ccm.encrypt(aes, ba, ba);
     ba = sjcl.mode.ccm.encrypt(aes, ba, ba, ba);
     ba = sjcl.mode.ccm.encrypt(aes, ba, ba, ba, 128);
 
+    ba = sjcl.mode.ccm.decrypt(aes, ba, ba);
+    ba = sjcl.mode.ccm.decrypt(aes, ba, ba, ba);
+    ba = sjcl.mode.ccm.decrypt(aes, ba, ba, ba, 128);
+
     ba = sjcl.mode.ocb2.encrypt(aes, ba, ba);
     ba = sjcl.mode.ocb2.encrypt(aes, ba, ba, ba);
     ba = sjcl.mode.ocb2.encrypt(aes, ba, ba, ba, 128);
     ba = sjcl.mode.ocb2.encrypt(aes, ba, ba, ba, 128, false);
+
+    ba = sjcl.mode.ocb2.decrypt(aes, ba, ba);
+    ba = sjcl.mode.ocb2.decrypt(aes, ba, ba, ba);
+    ba = sjcl.mode.ocb2.decrypt(aes, ba, ba, ba, 128);
+    ba = sjcl.mode.ocb2.decrypt(aes, ba, ba, ba, 128, false);
 }
 
 function testHmacPbdkf2() {
