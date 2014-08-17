@@ -231,13 +231,13 @@ declare module sjcl {
          * @param {number} carry (Optional) A byte to carry in.
          * @param {BitArray} out (Optional) An array to prepend to the output.
          *
-         * @return A BitArray.
+         * @return {BitArray} A shifted BitArray.
          */
         export function _shiftRight(a: BitArray, shift: number, carry?: number, out?: BitArray): BitArray;
 
         /**
          * xor a block of 4 words together.
-         *
+         * 
          * @private This function is for internal use.
          *
          * @param {number[]} x The first block of 4 words.
@@ -248,8 +248,291 @@ declare module sjcl {
         export function _xor4(x: number[], y: number[]): number[];
     }
 
+    module hash {
+        interface SjclHash {
+
+            /**
+             * The hash's block size, in bits.
+             * @constant.
+             */
+            blockSize: number;
+
+            /**
+             * Reset the hash state.
+             * @return this
+             */
+            reset(): SjclHash;
+
+            /**
+             * Input several words to the hash.
+             *
+             * @param {string} data the data to hash.
+             *
+             * @return this.
+             */
+            update(data: string): SjclHash;
+
+            /**
+             * Input several words to the hash.
+             *
+             * @param {BitArray} data the data to hash.
+             *
+             * @return this.
+             */
+            update(data: BitArray): SjclHash;
+
+            /**
+             * Complete hashing and output the hash value.
+             *
+             * @return {BitArray} The hash value.
+             */
+            finalize(): BitArray;
+        }
+
+        interface SjclHashStatic {
+            new (hash?: SjclHash): SjclHash;
+
+            /**
+             * Hash a string.
+             * @static.
+             *
+             * @param {string} data the data to hash.
+             *
+             * @return {BitArray} The hash value.
+             */
+            hash(data: string): BitArray;
+
+            /**
+             * Hash an array of words.
+             * @static.
+             *
+             * @param {BitArray} data the data to hash.
+             *
+             * @return {BitArray} The hash value.
+             */
+            hash(data: BitArray): BitArray;
+        }
+
+        class sha1 implements SjclHash {
+
+            /**
+             * Context for a SHA-1 operation in progress.
+             *
+             * @class Secure Hash Algorithm, 160 bits.
+             *
+             * @constructor.
+             *
+             * @param {sha1} hash (Optional) the hash to copy.
+             */
+            constructor(hash?: sha1);
+
+            /**
+             * The hash's block size, in bits.
+             * 
+             * @constant Equals to 512.
+             */
+            blockSize: number;
+
+            /**
+             * Reset the hash state.
+             * @return this
+             */
+            reset(): SjclHash;
+
+            /**
+             * Input several words to the hash.
+             *
+             * @param {string} data the data to hash.
+             *
+             * @return this.
+             */
+            update(data: string): SjclHash;
+
+            /**
+             * Input several words to the hash.
+             *
+             * @param {BitArray} data the data to hash.
+             *
+             * @return this.
+             */
+            update(data: BitArray): SjclHash;
+
+            /**
+             * Complete hashing and output the hash value.
+             *
+             * @return {BitArray} The hash value, an array of 5 big-endian words.
+             */
+            finalize(): BitArray;
+
+            /**
+             * Hash a string.
+             * @static.
+             *
+             * @param {string} data the data to hash.
+             *
+             * @return {BitArray} The hash value, an array of 5 big-endian words.
+             */
+            static hash(data: string): BitArray;
+
+            /**
+             * Hash an array of words.
+             * @static.
+             *
+             * @param {BitArray} data the data to hash.
+             *
+             * @return {BitArray} The hash value, an array of 5 big-endian words.
+             */
+            static hash(data: BitArray): BitArray;
+        }
+
+        class sha256 implements SjclHash {
+
+            /**
+             * Context for a SHA-256 operation in progress.
+             *
+             * @class Secure Hash Algorithm, 256 bits.
+             *
+             * @constructor.
+             *
+             * @param {sha256} hash (Optional) the hash to copy.
+             */
+            constructor(hash?: sha256);
+
+            /**
+             * The hash's block size, in bits.
+             * 
+             * @constant Equals to 512.
+             */
+            blockSize: number;
+
+            /**
+             * Reset the hash state.
+             *
+             * @return this.
+             */
+            reset(): SjclHash;
+
+            /**
+             * Input several words to the hash.
+             *
+             * @param {string} data the data to hash.
+             *
+             * @return this.
+             */
+            update(data: string): SjclHash;
+
+            /**
+             * Input several words to the hash.
+             *
+             * @param {BitArray} data the data to hash.
+             *
+             * @return this.
+             */
+            update(data: BitArray): SjclHash;
+
+            /**
+             * Complete hashing and output the hash value.
+             *
+             * @return {BitArray} The hash value, an array of 8 big-endian words.
+             */
+            finalize(): BitArray;
+
+            /**
+             * Hash a string.
+             * @static.
+             *
+             * @param {string} data the data to hash.
+             *
+             * @return {BitArray} The hash value, an array of 8 big-endian words.
+             */
+            static hash(data: string): BitArray;
+
+            /**
+             * Hash an array of words.
+             * @static.
+             *
+             * @param {BitArray} data the data to hash.
+             *
+             * @return {BitArray} The hash value, an array of 8 big-endian words.
+             */
+            static hash(data: BitArray): BitArray;
+        }
+
+        class sha512 implements SjclHash {
+
+            /**
+             * Context for a SHA-512 operation in progress.
+             *
+             * @class Secure Hash Algorithm, 512 bits.
+             *
+             * @constructor.
+             *
+             * @param {sha512} hash (Optional) the hash.
+             */
+            constructor(hash?: sha512);
+
+            /**
+             * The hash's block size, in bits.
+             * 
+             * @constant Equals to 1024.
+             */
+            blockSize: number;
+
+            /**
+             * Reset the hash state.
+             *
+             * @return this.
+             */
+            reset(): SjclHash;
+
+            /**
+             * Input several words to the hash.
+             *
+             * @param {string} data the data to hash.
+             *
+             * @return this.
+             */
+            update(data: string): SjclHash;
+
+            /**
+             * Input several words to the hash.
+             *
+             * @param {BitArray} data the data to hash.
+             *
+             * @return this.
+             */
+            update(data: BitArray): SjclHash;
+
+            /**
+             * Complete hashing and output the hash value.
+             *
+             * @return {BitArray} The hash value, an array of 16 big-endian words.
+             */
+            finalize(): BitArray;
+
+            /**
+             * Hash a string.
+             * @static.
+             *
+             * @param {string} data the data to hash.
+             *
+             * @return {BitArray} The hash value, an array of 16 big-endian words.
+             */
+            static hash(data: string): BitArray;
+
+            /**
+             * Hash an array of words.
+             * @static.
+             *
+             * @param {BitArray} data the data to hash.
+             *
+             * @return {BitArray} The hash value, an array of 16 big-endian words.
+             */
+            static hash(data: BitArray): BitArray;
+        }
+    }
+
     export var bn: BigNumberStatic;
-    export var hash: SjclHashes;
     export var exception: SjclExceptions;
     export var cipher: SjclCiphers;
     export var mode: SjclModes;
@@ -392,27 +675,6 @@ declare module sjcl {
 
     // ________________________________________________________________________
 
-    interface SjclHash {
-        reset(): SjclHash;
-        update(data: string): SjclHash;
-        update(data: BitArray): SjclHash;
-        finalize(): BitArray;
-    }
-
-    interface SjclHashStatic {
-        new (hash?: SjclHash): SjclHash;
-        hash(data: string): BitArray;
-        hash(data: BitArray): BitArray;
-    }
-
-    interface SjclHashes {
-        sha1: SjclHashStatic;
-        sha256: SjclHashStatic;
-        sha512: SjclHashStatic;
-    }
-
-    // ________________________________________________________________________
-
     interface SjclExceptions {
         corrupt: SjclExceptionFactory;
         invalid: SjclExceptionFactory;
@@ -507,7 +769,7 @@ declare module sjcl {
     }
 
     interface SjclHmacStatic {
-        new (key: BitArray, Hash?: SjclHashStatic): SjclHmac;
+        new (key: BitArray, Hash?: hash.SjclHashStatic): SjclHmac;
     }
 
     // ________________________________________________________________________

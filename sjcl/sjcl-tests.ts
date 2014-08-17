@@ -145,7 +145,7 @@ function testCodecs() {
 }
 
 function testHashes() {
-    var hash: sjcl.SjclHash;
+    var hash: sjcl.hash.SjclHash;
     ba = hash.reset().update("xxx").update(ba).finalize();
 
     hash = new sjcl.hash.sha1();
