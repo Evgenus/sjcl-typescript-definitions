@@ -270,16 +270,7 @@ declare module sjcl {
              *
              * @return this.
              */
-            update(data: string): SjclHash;
-
-            /**
-             * Input several words to the hash.
-             *
-             * @param {BitArray} data the data to hash.
-             *
-             * @return this.
-             */
-            update(data: BitArray): SjclHash;
+            update(data: string|BitArray): SjclHash;
 
             /**
              * Complete hashing and output the hash value.
@@ -296,21 +287,11 @@ declare module sjcl {
              * Hash a string.
              * @static.
              *
-             * @param {string} data the data to hash.
+             * @param {string|BitArray} data the data to hash.
              *
              * @return {BitArray} The hash value.
              */
-            hash(data: string): BitArray;
-
-            /**
-             * Hash an array of words.
-             * @static.
-             *
-             * @param {BitArray} data the data to hash.
-             *
-             * @return {BitArray} The hash value.
-             */
-            hash(data: BitArray): BitArray;
+            hash(data: string|BitArray): BitArray;
         }
 
         class sha1 implements SjclHash {
@@ -342,20 +323,11 @@ declare module sjcl {
             /**
              * Input several words to the hash.
              *
-             * @param {string} data the data to hash.
+             * @param {string|BitArray} data the data to hash.
              *
              * @return this.
              */
-            update(data: string): SjclHash;
-
-            /**
-             * Input several words to the hash.
-             *
-             * @param {BitArray} data the data to hash.
-             *
-             * @return this.
-             */
-            update(data: BitArray): SjclHash;
+            update(data: string|BitArray): SjclHash;
 
             /**
              * Complete hashing and output the hash value.
@@ -368,21 +340,11 @@ declare module sjcl {
              * Hash a string.
              * @static.
              *
-             * @param {string} data the data to hash.
+             * @param {string|BitArray} data the data to hash.
              *
              * @return {BitArray} The hash value, an array of 5 big-endian words.
              */
-            static hash(data: string): BitArray;
-
-            /**
-             * Hash an array of words.
-             * @static.
-             *
-             * @param {BitArray} data the data to hash.
-             *
-             * @return {BitArray} The hash value, an array of 5 big-endian words.
-             */
-            static hash(data: BitArray): BitArray;
+            static hash(data: string|BitArray): BitArray;
         }
 
         class sha256 implements SjclHash {
@@ -415,20 +377,11 @@ declare module sjcl {
             /**
              * Input several words to the hash.
              *
-             * @param {string} data the data to hash.
+             * @param {string|BitArray} data the data to hash.
              *
              * @return this.
              */
-            update(data: string): SjclHash;
-
-            /**
-             * Input several words to the hash.
-             *
-             * @param {BitArray} data the data to hash.
-             *
-             * @return this.
-             */
-            update(data: BitArray): SjclHash;
+            update(data: string|BitArray): SjclHash;
 
             /**
              * Complete hashing and output the hash value.
@@ -441,21 +394,11 @@ declare module sjcl {
              * Hash a string.
              * @static.
              *
-             * @param {string} data the data to hash.
+             * @param {string|BitArray} data the data to hash.
              *
              * @return {BitArray} The hash value, an array of 8 big-endian words.
              */
-            static hash(data: string): BitArray;
-
-            /**
-             * Hash an array of words.
-             * @static.
-             *
-             * @param {BitArray} data the data to hash.
-             *
-             * @return {BitArray} The hash value, an array of 8 big-endian words.
-             */
-            static hash(data: BitArray): BitArray;
+            static hash(data: string|BitArray): BitArray;
         }
 
         class sha512 implements SjclHash {
@@ -488,20 +431,11 @@ declare module sjcl {
             /**
              * Input several words to the hash.
              *
-             * @param {string} data the data to hash.
+             * @param {string|BitArray} data the data to hash.
              *
              * @return this.
              */
-            update(data: string): SjclHash;
-
-            /**
-             * Input several words to the hash.
-             *
-             * @param {BitArray} data the data to hash.
-             *
-             * @return this.
-             */
-            update(data: BitArray): SjclHash;
+            update(data: string|BitArray): SjclHash;
 
             /**
              * Complete hashing and output the hash value.
@@ -518,17 +452,7 @@ declare module sjcl {
              *
              * @return {BitArray} The hash value, an array of 16 big-endian words.
              */
-            static hash(data: string): BitArray;
-
-            /**
-             * Hash an array of words.
-             * @static.
-             *
-             * @param {BitArray} data the data to hash.
-             *
-             * @return {BitArray} The hash value, an array of 16 big-endian words.
-             */
-            static hash(data: BitArray): BitArray;
+            static hash(data: string|BitArray): BitArray;
         }
     }
 
@@ -590,7 +514,7 @@ declare module sjcl {
              *
              * @return An export.
              */
-            export function _ctrMode(encrypt, prf, data, adata, iv, tlen): {
+            export function _ctrMode(encrypt: boolean, prf: SjclCipher, data: BitArray, adata: BitArray, iv: BitArray, tlen: number): {
                 tag: BitArray;
                 data: BitArray;
             };
@@ -740,8 +664,9 @@ declare module sjcl {
     export var prng: SjclRandomStatic;
     export var keyexchange: SjclKeyExchange;
     export var json: SjclJson;
-    export var encrypt: SjclConveninceEncryptor;
-    export var decrypt: SjclConveninceDecryptor;
+
+    export function encrypt(password: string|BitArray|SjclElGamalPublicKey, plaintext: string, params?: SjclCipherEncryptParams, rp?: SjclCipherEncrypted): SjclCipherEncrypted;
+    export function decrypt(password: string|BitArray|SjclElGamalSecretKey, ciphertext: SjclCipherEncrypted, params?: SjclCipherDecryptParams, rp?: SjclCipherDecrypted): string;
 
     // ________________________________________________________________________
 
@@ -752,26 +677,24 @@ declare module sjcl {
         copy(): BigNumber;
 
         /// Initializes this with it, either as a bn, a number, or a hex string.
-        initWith: TypeHelpers.BigNumberBinaryOperator;
+        initWith(that: number|string|BigNumber): BigNumber;
 
         /// Returns true if "this" and "that" are equal.  Calls fullReduce().
         /// Equality test is in constant time.
-        equals(that: number): boolean;
-        equals(that: BigNumber): boolean;
+        equals(that: number|BigNumber): boolean;
 
         /// Get the i'th limb of this, zero if i is too large.
         getLimb(index: number): number;
 
         /// Constant time comparison function.
         /// Returns 1 if this >= that, or zero otherwise.
-        greaterEquals(that: number): boolean;
-        greaterEquals(that: BigNumber): boolean;
+        greaterEquals(that: number|BigNumber): boolean;
 
         /// Convert to a hex string.
         toString(): string;
 
         /// this += that.  Does not normalize.
-        addM: TypeHelpers.BigNumberBinaryOperator;
+        addM(that: number|string|BigNumber): BigNumber;
 
         /// this *= 2.  Requires normalized; ends up normalized.
         doubleM(): BigNumber;
@@ -780,35 +703,33 @@ declare module sjcl {
         halveM(): BigNumber;
 
         /// this -= that.  Does not normalize.
-        subM: TypeHelpers.BigNumberBinaryOperator;
+        subM(that: number|string|BigNumber): BigNumber;
 
-        mod: TypeHelpers.BigNumberBinaryOperator;
+        mod(that: number|string|BigNumber): BigNumber;
 
         /// return inverse mod prime p.  p must be odd. Binary extended Euclidean algorithm mod p.
-        inverseMod: TypeHelpers.BigNumberBinaryOperator;
+        inverseMod(p: number|string|BigNumber): BigNumber;
 
         /// this + that.  Does not normalize.
-        add: TypeHelpers.BigNumberBinaryOperator;
+        add(that: number|string|BigNumber): BigNumber;
 
         /// this - that.  Does not normalize.
-        sub: TypeHelpers.BigNumberBinaryOperator;
+        sub(that: number|string|BigNumber): BigNumber;
 
         /// this * that.  Normalizes and reduces.
-        mul: TypeHelpers.BigNumberBinaryOperator;
+        mul(that: number|string|BigNumber): BigNumber;
 
         /// this ^ 2.  Normalizes and reduces.
         square(): BigNumber;
 
         /// this ^ n.  Uses square-and-multiply.  Normalizes and reduces.
-        power(n: number): BigNumber;
-        power(n: BigNumber): BigNumber;
-        power(a: number[]): BigNumber;
+        power(n: number|number[]|BigNumber): BigNumber;
 
         /// this * that mod N
-        mulmod: TypeHelpers.BigNumberTrinaryOperator;
+        mulmod(that: number|string|BigNumber, N: number|string|BigNumber): BigNumber;
 
         /// this ^ x mod N
-        powermod: TypeHelpers.BigNumberTrinaryOperator;
+        powermod(that: number|string|BigNumber, N: number|string|BigNumber): BigNumber;
 
         trim(): BigNumber;
 
@@ -832,13 +753,10 @@ declare module sjcl {
     }
 
     interface BigNumberStatic {
-        new (): BigNumber;
-        new (n: string): BigNumber;
-        new (n: number): BigNumber;
-        new (n: BigNumber): BigNumber;
+        new (n?: string|number|BigNumber): BigNumber;
 
         fromBits(bits: BitArray): BigNumber;
-        random: TypeHelpers.Bind1<number>;
+        random(bits: number): BigNumber;
         prime: {
             p127: PseudoMersennePrimeStatic;
             // Bernstein's prime for Curve25519
@@ -865,10 +783,7 @@ declare module sjcl {
     }
 
     interface PseudoMersennePrimeStatic extends BigNumberStatic {
-        new (): PseudoMersennePrime;
-        new (n: string): PseudoMersennePrime;
-        new (n: number): PseudoMersennePrime;
-        new (n: BigNumber): PseudoMersennePrime;
+        new (n: string|number|BigNumber): PseudoMersennePrime;
     }
 
     // ________________________________________________________________________
@@ -908,10 +823,7 @@ declare module sjcl {
     }
 
     interface SjclMisc {
-        pbkdf2(password: string, salt: string, count?: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
-        pbkdf2(password: BitArray, salt: string, count?: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
-        pbkdf2(password: BitArray, salt: BitArray, count?: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
-        pbkdf2(password: string, salt: BitArray, count?: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
+        pbkdf2(password: string|BitArray, salt: string|BitArray, count?: number, length?: number, Prff?: SjclPseudorandomFunctionFamilyStatic): BitArray;
         hmac: SjclHmacStatic;
         cachedPbkdf2(password: string, obj?: Pbkdf2Params): {
             key: BitArray;
@@ -920,16 +832,13 @@ declare module sjcl {
     }
 
     class SjclPseudorandomFunctionFamily {
-        encrypt(data: string): BitArray;
-        encrypt(data: BitArray): BitArray;
+        encrypt(data: string|BitArray): BitArray;
     }
 
     interface SjclHmac extends SjclPseudorandomFunctionFamily {
-        mac(data: string): BitArray;
-        mac(data: BitArray): BitArray;
+        mac(data: string|BitArray): BitArray;
         reset(): void;
-        update(data: string): void;
-        update(data: BitArray): void;
+        update(data: string|BitArray): void;
         digest(): BitArray;
     }
 
@@ -1019,8 +928,7 @@ declare module sjcl {
     }
 
     interface SjclECCPublicKeyFactory<T extends SjclECCPublicKey> {
-        new (curve: SjclEllipticalCurve, point: SjclEllipticalPoint): T;
-        new (curve: SjclEllipticalCurve, point: BitArray): T;
+        new (curve: SjclEllipticalCurve, point: SjclEllipticalPoint|BitArray): T;
     }
 
     interface SjclECCSecretKeyFactory<T extends SjclECCSecretKey> {
@@ -1070,9 +978,7 @@ declare module sjcl {
     interface SjclRandom {
         randomWords(nwords: number, paranoia?: number): BitArray;
         setDefaultParanoia(paranoia: number, allowZeroParanoia: string): void;
-        addEntropy(data: number, estimatedEntropy: number, source: string): void;
-        addEntropy(data: number[], estimatedEntropy: number, source: string): void;
-        addEntropy(data: string, estimatedEntropy: number, source: string): void;
+        addEntropy(data: number|number[]|string, estimatedEntropy: number, source: string): void;
         isReady(paranoia?: number): boolean;
         getProgress(paranoia?: number): number;
         startCollectors(): void;
@@ -1099,8 +1005,7 @@ declare module sjcl {
     interface SecureRemotePassword {
         makeVerifier(username: string, password: string, salt: BitArray, group: SjclSRPGroup): BitArray;
         makeX(username: string, password: string, salt: BitArray): BitArray;
-        knownGroup(i: string): SjclSRPGroup;
-        knownGroup(i: number): SjclSRPGroup;
+        knownGroup(i: string|number): SjclSRPGroup;
     }
 
     // ________________________________________________________________________
@@ -1134,43 +1039,10 @@ declare module sjcl {
         key: BitArray;
     }
 
-    interface SjclConveninceEncryptor {
-        (password: string, plaintext: string, params?: SjclCipherEncryptParams, rp?: SjclCipherEncrypted): SjclCipherEncrypted;
-        (password: BitArray, plaintext: string, params?: SjclCipherEncryptParams, rp?: SjclCipherEncrypted): SjclCipherEncrypted;
-        (password: SjclElGamalPublicKey, plaintext: string, params?: SjclCipherEncryptParams, rp?: SjclCipherEncrypted): SjclCipherEncrypted;
-    }
-
-    interface SjclConveninceDecryptor {
-        (password: string, ciphertext: SjclCipherEncrypted, params?: SjclCipherDecryptParams, rp?: SjclCipherDecrypted): string;
-        (password: BitArray, ciphertext: SjclCipherEncrypted, params?: SjclCipherDecryptParams, rp?: SjclCipherDecrypted): string;
-        (password: SjclElGamalSecretKey, ciphertext: SjclCipherEncrypted, params?: SjclCipherDecryptParams, rp?: SjclCipherDecrypted): string;
-    }
-
     interface SjclJson {
-        encrypt: SjclConveninceEncryptor;
-        decrypt: SjclConveninceDecryptor;
+        encrypt(password: string|BitArray|SjclElGamalPublicKey, plaintext: string, params?: SjclCipherEncryptParams, rp?: SjclCipherEncrypted): SjclCipherEncrypted;
+        decrypt(password: string|BitArray|SjclElGamalSecretKey, ciphertext: SjclCipherEncrypted, params?: SjclCipherDecryptParams, rp?: SjclCipherDecrypted): string;
         encode(obj: Object): string;
         decode(obj: string): Object;
-    }
-
-    // ________________________________________________________________________
-
-    module TypeHelpers {
-        interface One<T> {
-            (value: T): BigNumber;
-        }
-
-        interface BigNumberBinaryOperator extends One<number>, One<string>, One<BigNumber> {
-        }
-
-        interface Two<T1, T2> {
-            (x: T1, N: T2): BigNumber;
-        }
-
-        interface Bind1<T> extends Two<number, T>, Two<string, T>, Two<BigNumber, T> {
-        }
-
-        interface BigNumberTrinaryOperator extends Bind1<number>, Bind1<string>, Bind1<BigNumber> {
-        }
     }
 }
