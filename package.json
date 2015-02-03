@@ -1,6 +1,6 @@
 {
   "name": "sjcl-typescript-definitions",
-  "version": "1.0.1-0",
+  "version": "1.0.1-1",
   "description": "Typescript definitions files for Stanford Javascript Crypto Library",
   "scripts": {
     "test": "tsc --noImplicitAny --outDir temp --module commonjs sjcl/sjcl-tests.ts"
@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/Evgenus/sjcl-typescript-definitions",
   "devDependencies": {
-    "typescript": "^1.0.1"
+    "typescript": "^1.4.1"
   }
 }
